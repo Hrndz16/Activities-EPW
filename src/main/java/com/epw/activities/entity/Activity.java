@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "activity")
 public class Activity {
@@ -47,7 +50,41 @@ public class Activity {
         this.updatedAt = Instant.now();
     }
 
+    @OneToOne(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ActivityDetail detail;
+
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reminder> reminders = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     // Getters/Setters (si usas Lombok, puedes reemplazar por Getter/@Setter)
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Reminder> getReminders() {
+        return reminders;
+    }
+
+    public void setReminders(List<Reminder> reminders) {
+        this.reminders = reminders;
+    }
+
+    public ActivityDetail getDetail() {
+        return detail;
+    }
+
+    public void setDetail(ActivityDetail detail) {
+        this.detail = detail;
+    }
+
     public Long getId() {
         return id;
     }
